@@ -1,0 +1,577 @@
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
+using System.Xml;
+using System.Xml.Serialization;
+using Helper;
+
+namespace Tester
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {            
+            //string input = "";
+
+            //ConfigHelper ch = new ConfigHelper("Config.txt");
+
+            //ch.Configs.Keys.ToList();            
+
+            //string ip = "127.0.0.1";
+            //string catalog = "SSWAREV3";
+            //string id = "sa";
+            //string password = "sungwon530";
+
+            //string connectionString = "Data Source=" + ip + ",1433; Initial Catalog=" + catalog
+            //    + "; User id=" + id + "; Password=" + password + ";";
+
+            //DbHelper dh = new DbHelper(connectionString);
+            //Logger l = new Logger(Directory.GetCurrentDirectory() + @"\Logger");
+            //dh.SetLogger(l);
+            //l.SetDbHelper(dh);
+
+            ////DbHelper
+            //DataSet ds = new DataSet();
+            //dh.CallQuery("select * from information_schema.tables(nolock)", ref ds);
+            //dh.CallQuery("create table test ( id int not null, qty int )", ref ds);
+            //Console.WriteLine(dh.latestError);
+
+            ////ERDHelper
+            //ERDHelper eh = new ERDHelper(dh);
+            //eh.SetLogger(l);
+
+            ////WebHelper
+            //WebHelper wh = new WebHelper();
+            //wh.SetLogger(l);
+            //wh.logToDB = true;
+            //string res = wh.Request("https://www.naver.com");
+            //Console.WriteLine(res);
+
+            ////FileHelper
+            //FileHelper fh = new FileHelper("ftp://localhost/Root", "testftpuser", "1111", dh, l);
+            //string sourceUploadFilePath = Directory.GetCurrentDirectory() + @"\Files\Test.txt";
+            //fh.Upload(sourceUploadFilePath, "TestDest.txt");
+            //string targetDownloadFilePath = Directory.GetCurrentDirectory() + @"\Files\Test2.txt";
+            //fh.Download(targetDownloadFilePath, "TestDest.txt");
+
+            ////MailHelper
+            //sswaresmtp@gmail.com/sungwon530
+            //MailHelper mh = new MailHelper("smtp.gmail.com", 587, "sswaresmtp@gmail.com", "sungwon530");
+            //mh.SetLogger(l);
+            //mh.Send("MyTest", "TestBody xxx", new string[] { "ssw900528@gmail.com" });
+        }
+    }
+}
+
+
+using iTextSharp.text.pdf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HelperDotNet;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf.parser;
+using System.Data;
+using System.Diagnostics;
+
+
+namespace PickslipPrinterV3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //DbConnector dbc = new DbConnector();
+            //dbc.Test();
+
+            //FileStream fs = new FileStream("PSWriter.pdf", FileMode.Create, FileAccess.Write, FileShare.None);
+            //Document doc = new Document();
+            //PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+            //doc.Open();
+
+            //PdfReader reader = new PdfReader("HM OB_Picking Label_v2.pdf");
+            //string text = "";            
+            //text = PdfTextExtractor.GetTextFromPage(reader, 1);
+
+            //doc.Add(new Paragraph(text));
+            //reader.Close();
+
+            //doc.Close();
+
+            //Rectangle r = PageSize.A4;
+            string filename = "PSWriter" + new Random().Next() + ".pdf";
+            FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None);
+            Document doc = new Document(new Rectangle(200, 130), 5, 5, 5, 5);
+            PdfWriter writer = PdfWriter.GetInstance(doc, fs);
+            doc.Open();
+
+            //BaseFont bf = BaseFont.CreateFont("gulim.ttc", "utf-16", false);
+            //Paragraph p = new Paragraph();
+            //p.Add(new Chunk("항글: ", new Font(Font.FontFamily.UNDEFINED, 24, Font.BOLD)));
+
+
+            //폰트 이거 쓰면 됨
+            //FontFactory.Register("gulim.ttc");
+            //Font TitleFont = FontFactory.GetFont("굴림체", BaseFont.IDENTITY_H, 12);
+            //Font DataFont = FontFactory.GetFont("굴림체", BaseFont.IDENTITY_H, 2);
+
+            //doc.NewPage();
+            //Paragraph p = new Paragraph();
+            //p.Add(new Chunk("aaa", TitleFont));
+
+            //해당 포지션에 글씨 삽입 -> 이거 쓰면 될듯?
+            //ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("한글1", TitleFont), 120, 30, 0);
+            //ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("한글2", TitleFont), 30, 60, 0);
+            //ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("한글3", TitleFont), 30, 30, 0);
+            //ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("한글4", TitleFont), 120, 60, 0);
+
+            //DbConnector dbc = new DbConnector();
+            //DbHelper dh = dbc.dh;
+            //Logger l = dbc.l;
+            //DataSet ds = new DataSet();
+
+            //string brand = "HM";
+            //string stlkey = "0000344567";
+            ////string endkey = "0000344601";
+            //string endkey = "0000344567";
+            //string query = "exec krlocal..isp_kr_hmpickslip02 '" + brand + "', '99', '" + stlkey + "', '" + endkey + "'";
+
+            ////Console.WriteLine(query);
+            //dh.CallQuery(query, ref ds);
+
+            //DataColumnCollection dc = ds.Tables[0].Columns;
+
+            //foreach (DataRow r in ds.Tables[0].Rows)
+            //{
+            //    //foreach (DataColumn c in dc)
+            //    //{
+            //    //    Console.Write(c + " = " + r[c] + " /");
+            //    //}
+            //    //Console.WriteLine();
+
+            //    ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase(r["SKU"].ToString(), TitleFont), 90, 90, 0);
+            //    doc.NewPage();
+            //}
+
+            //~Imple
+
+
+
+            //ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("한글1", TitleFont), 120, 30, 0);
+
+            //ColumnText ct = new ColumnText(writer.DirectContent);
+            //ct.SetSimpleColumn(new Rectangle(0, 0, 523, 50));
+            //ct.AddElement(new Paragraph("This could be a very long sentence that needs to be wrapped"));
+            //ct.Go();
+
+            //doc.Add(new Paragraph("1"));            
+            //doc.NewPage();
+            //doc.Add(new Paragraph("2"));
+            //doc.NewPage();
+            //doc.Add(new Paragraph("3"));
+            //doc.NewPage();
+            //doc.Add(new Paragraph("4"));
+
+            //PdfContentByte pcb = writer.DirectContent;
+            //pcb.MoveTo(10, 10);
+            //pcb.LineTo(190, 10);
+            //pcb.Stroke();
+
+            ////coords
+            //int i, j;
+            //Font coordFont = FontFactory.GetFont("굴림체", BaseFont.IDENTITY_H, 2);
+            //for (i = 0; i < 20; i += 2)
+            //{
+            //    for (j = 0; j < 20; j += 2)
+            //    {
+            //        ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER
+            //            , new Phrase((i * 10) + "," + (j * 10), coordFont), i * 10, j * 10, 0);
+            //    }
+            //}
+
+            //Imple
+            DbConnector dbc = new DbConnector();
+            DbHelper dh = dbc.dh;
+            Logger l = dbc.l;
+            DataSet ds = new DataSet();
+
+            string brand = "HM";
+            string stlkey = "0000344567";
+            //string endkey = "0000344601";
+            string endkey = "0000344567";
+            string query = "exec krlocal..isp_kr_hmpickslip02 '" + brand + "', '99', '" + stlkey + "', '" + endkey + "'";
+
+            //Console.WriteLine(query);
+            dh.CallQuery(query, ref ds);
+
+            DataColumnCollection dc = ds.Tables[0].Columns;
+
+            //declare font
+            //FontFactory.Register("gulim.ttc");
+            FontFactory.Register("malgun.ttf");
+            FontFactory.Register("malgunsl.ttf");
+            FontFactory.Register("malgunbd.ttf");
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                //Frame Rects
+                PdfContentByte cb1 = writer.DirectContent;
+                cb1.Rectangle(5, 5, 190, 120);
+                cb1.Stroke();
+
+                PdfContentByte cb2 = writer.DirectContent;
+                cb2.Rectangle(150, 90, 45, 35);
+                cb2.FillStroke();
+
+                //OrderNo
+                Font orderNoFont = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 14, Font.BOLD, BaseColor.WHITE);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("HM", orderNoFont), 170, 110, 0);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase(r["OrderNo"].ToString(), orderNoFont), 170, 95, 0);
+
+                //Location
+                Font locFont = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 18, Font.BOLD, BaseColor.BLACK);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("Loc: " + r["Loc"], locFont), 75, 100, 0);
+
+                //Sku
+                Font skuFont = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 16, Font.BOLD, BaseColor.BLACK);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("SKU: " + r["SKU"], skuFont), 85, 75, 0);
+
+                //Color
+                Font colorFont = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 16, Font.BOLD, BaseColor.BLACK);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase(r["Color"].ToString(), colorFont), 177, 74, 0);
+
+                //Qty
+                Font qtyFont = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 16, Font.BOLD, BaseColor.BLACK);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("Qty: " + r["QTY"], qtyFont), 170, 60, 0);
+
+                //LoadKey
+                Font loadFont1 = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 12, Font.NORMAL, BaseColor.BLACK);
+                Font loadFont2 = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 12, Font.UNDERLINE, BaseColor.BLACK);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("Load: ", loadFont1), 30, 63, 0);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase(r["LoadKey"].ToString(), loadFont2), 80, 63, 0);
+
+                //OrderKey
+                Font orderFont = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 12, Font.NORMAL, BaseColor.BLACK);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase("Order: " + r["OrderKey"], orderFont), 62, 49, 0);
+
+                //Sequence
+                Font seqFont = FontFactory.GetFont("맑은 고딕", BaseFont.IDENTITY_H, 10, Font.NORMAL, BaseColor.BLACK);
+                ColumnText.ShowTextAligned(writer.DirectContent, Element.ALIGN_CENTER, new Phrase(r["LineNumber"] + "/" + r["ExternLineNo"] + "/" + r["TotalLines"], orderFont), 100, 10, 0);
+
+                //Barcode
+                Barcode128 barcodeImg = new Barcode128();
+                barcodeImg.Code = r["OrderKey"].ToString();
+                System.Drawing.Image img = barcodeImg.CreateDrawingImage(System.Drawing.Color.Black, System.Drawing.Color.White);
+                iTextSharp.text.Image pic = iTextSharp.text.Image.GetInstance(img, System.Drawing.Imaging.ImageFormat.Jpeg);
+                pic.SetAbsolutePosition(55, 20);
+                doc.Add(pic);
+
+                doc.NewPage();                
+            }
+
+            doc.Close();
+
+            Process.Start(filename);
+        }
+    }
+}
+
+
+
+        public static string GetTreeJson(DataTable dt)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{ \"tree\" : [");
+            GetInnerTree(dt, ref sb, 0, 0);
+            sb.Append("]}");
+            return sb.ToString();
+        }
+
+        public static int GetInnerTree(DataTable dt, ref StringBuilder sb, int position, int parent = 0)
+        {
+            int i;
+            int j = 0;
+
+            for (i = position; i < dt.Rows.Count; i++)
+            {
+                if (int.Parse(dt.Rows[i]["parent"].ToString()) != parent) continue;
+                j++;
+                sb.Append("{");
+                foreach (DataColumn c in dt.Columns)
+                {
+                    sb.Append("\"" + c.ColumnName + "\" : " + "\"" + dt.Rows[i][c] + "\",");
+                }
+
+                if (dt.Rows[i]["Type"].ToString() == "Group")
+                {
+                    sb.Append("\"child\" : [");
+                    if (GetInnerTree(dt, ref sb, i + 1, int.Parse(dt.Rows[i]["id"].ToString())) > 0)
+                        sb.Append("]");
+                    else sb.Remove(sb.Length - 11, 11);                    
+                }
+                else //User
+                {
+                    sb.Remove(sb.Length - 1, 1);
+                }
+                sb.Append("},");
+            }
+            sb.Remove(sb.Length - 1, 1);
+            return j;
+        }
+
+                public static string Encrypt(string key, string data)
+        {
+            Rijndael r = Rijndael.Create();
+            byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+            byte[] dataBytes = Encoding.ASCII.GetBytes(data);
+            r.Key = keyBytes;
+            r.IV = keyBytes;
+
+            byte[] encryptedData;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(
+                ms, r.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(dataBytes, 0, dataBytes.Length);
+                }
+                encryptedData = ms.ToArray();
+            }
+
+            return Convert.ToBase64String(encryptedData);
+        }
+
+        public static string Decrypt(string key, string data)
+        {
+            Rijndael r = Rijndael.Create();
+            byte[] keyBytes = Encoding.ASCII.GetBytes(key);
+            byte[] dataBytes = Convert.FromBase64String(data);
+            r.Key = keyBytes;
+            r.IV = keyBytes;
+            byte[] decryptedData;
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                using (CryptoStream cs = new CryptoStream(
+                    ms, r.CreateDecryptor(), CryptoStreamMode.Write))
+                {
+                    cs.Write(dataBytes, 0, dataBytes.Length);
+                }
+                decryptedData = ms.ToArray();
+            }
+
+            return Encoding.ASCII.GetString(decryptedData);
+        }
+
+
+                /// <summary>
+        /// Datatable to csv file
+        /// </summary>
+        /// <param name="dt">Datatable object</param>        
+        /// <param name="title">Csv file title</param>
+        /// <returns>0:wrote successfully, 1:file already exist</returns>
+        public int WriteFile(DataTable dt, string title = "")
+        {
+            string FullPathWithTitle = FullPath + @"\"
+                + DateTime.Now.ToString("yyyyMMddHHmmss") + title + ".csv";
+
+            if (File.Exists(FullPathWithTitle)) return 1;
+            else
+            {
+                using (FileStream fs = File.Create(FullPathWithTitle))
+                {
+                    StringBuilder sb = new StringBuilder();
+                    string comma = "";
+
+                    foreach (DataColumn col in dt.Columns)
+                    {
+                        sb.Append(comma + "\"" + col.ColumnName + "\"");
+                        comma = ",";
+                    }
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        comma = "";
+                        sb.Append(Environment.NewLine);
+                        foreach (DataColumn col in dt.Columns)
+                        {
+                            sb.Append(comma + "\"" + row[col] + "\"");
+                            comma = ",";
+                        }
+                    }
+
+                    byte[] bytes = Encoding.Default.GetBytes(sb.ToString());
+                    fs.Write(bytes, 0, bytes.Length);
+                }
+                return 0;
+            }
+        }
+
+                    finally
+            {
+                WriteLog("request type : " + method + "/url : " + url + "/response : " 
+                    + (res.Length > 100 ? res.Substring(0, 100) : res) + " ...");
+            }
+
+            using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace Helper
+{
+    public static class EncryptHelper
+    {
+        public static string Decrypt(string key, string data)
+        {
+            return Convert.ToBase64String(Decrypt(
+                Encoding.ASCII.GetBytes(data)
+                , Encoding.ASCII.GetBytes(key)));
+        }
+
+        public static string Encrypt(string key, string data)
+        {
+            return Convert.ToBase64String(Encrypt(
+                Encoding.ASCII.GetBytes(data)
+                , Encoding.ASCII.GetBytes(key)));
+        }
+
+        //Decrypt byte[]
+        public static byte[] Decrypt(byte[] data, byte[] key)
+        {
+            MemoryStream ms = new MemoryStream();
+            Rijndael alg = Rijndael.Create();
+            alg.Key = key;
+            alg.IV = key;
+
+            using (CryptoStream cs = new CryptoStream
+                (ms, alg.CreateDecryptor(), CryptoStreamMode.Write))
+            {
+                cs.Write(data, 0, data.Length);
+            }
+
+            byte[] decryptedData = ms.ToArray();
+            return decryptedData;
+        }
+
+        //Encrypt byte[]
+        public static byte[] Encrypt(byte[] data, byte[] key)
+        {
+            MemoryStream ms = new MemoryStream();
+            Rijndael alg = Rijndael.Create();
+            alg.Key = key;
+            alg.IV = key;
+
+            using (CryptoStream cs = new CryptoStream
+                (ms, alg.CreateEncryptor(), CryptoStreamMode.Write))
+            {
+                cs.Write(data, 0, data.Length);
+            }
+
+            byte[] encryptedData = ms.ToArray();
+            return encryptedData;
+        }
+
+        //Get encrypt key
+        public static byte[] GetKey()
+        {
+            Random r = new Random();
+            byte[] array = new byte[16];
+            r.NextBytes(array);
+            return array;
+        }
+    }
+}
+using System.Data;
+using System.Text;
+
+namespace Helper
+{
+    /// <summary>
+    /// Helpes handling html table, json, xml etc..
+    /// </summary>
+    public static class GridHelper
+    {
+        /// <summary>
+        /// Datatable to html table
+        /// </summary>
+        /// <param name="datatable">Datatable</param>
+        /// <param name="style">Table style class name</param>
+        /// <param name="header">Draw header to column name</param>
+        /// <returns>Html string</returns>
+        public static string GetHtml(DataTable datatable, string style, bool header = true)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<table class='" + style + "'>");
+
+            if (header)
+            {
+                sb.Append("<tr>");
+                foreach (DataColumn col in datatable.Columns)
+                {
+                    sb.Append("<th>" + col.ColumnName + "</th>");
+                }
+                sb.Append("</tr>");
+            }
+
+            foreach (DataRow row in datatable.Rows)
+            {
+                sb.Append("<tr>");
+                foreach (DataColumn col in datatable.Columns)
+                {
+                    sb.Append("<td>" + row[col] + "</td>");
+                }
+                sb.Append("</tr>");
+            }
+
+            sb.Append("</table>");
+            return sb.ToString();
+        }
+
+        public static string GetXml(DataTable dt)
+        {
+            StringBuilder sb = new StringBuilder();
+            
+            sb.Append("<table>");
+
+            foreach (DataRow row in dt.Rows)
+            {
+                sb.Append("<rows>");
+                foreach (DataColumn col in dt.Columns)
+                {
+                    sb.Append("<" + col + ">" + row[col] + "</" + col + ">");
+                }
+                sb.Append("</rows>");
+            }
+
+            sb.Append("</table>");
+            return sb.ToString();
+        }
+
+        public static string GetJson(DataTable dt)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("{ \"table\" : [");
+
+            foreach (DataRow r in dt.Rows)
+            {
+                sb.Append("{");
+                foreach (DataColumn c in dt.Columns)
+                {
+                    sb.Append("\"" + c.ColumnName + "\" : " + "\"" + r[c] + "\",");
+                }
+                sb.Remove(sb.Length - 1, 1);
+                sb.Append("},");
+            }
+            sb.Remove(sb.Length - 1, 1);
+            sb.Append("]}");
+            return sb.ToString();
+        }
+    }
+}
