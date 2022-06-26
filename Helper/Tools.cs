@@ -3,6 +3,7 @@ using System.Data;
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace Helper
 {
@@ -150,6 +151,49 @@ namespace Helper
                 byte[] array = new byte[16];
                 r.NextBytes(array);
                 return array;
+            }
+
+            //TextFile to 2D Matrix
+            private static string[][] MyTrimming(string str)
+            {
+                string[] lines = str.Replace("\r", "").Split('\n');
+                List<string> lineList = new List<string>();
+                foreach (string s in lines)
+                {
+                    if (!lineList.Contains(s))
+                    {
+                        lineList.Add(s);
+                    }
+                }
+
+                List<string[]> tmp = new List<string[]>();
+                foreach (string s in lineList)
+                {
+                    if (s.Length > 0)
+                    {
+                        string[] items = s.Split(' ');
+                        List<string> stacks = new List<string>();
+                        foreach (string ss in items)
+                        {
+                            if (ss.Length > 0)
+                            {
+                                stacks.Add(MyTrim(ss));
+                            }
+                        }
+                        tmp.Add(stacks.ToArray());
+                    }
+                }
+
+                return tmp.ToArray();
+            }
+
+            //Remove space in both sides, also remove \r \n \t
+            private static string MyTrim(string s)
+            {
+                return s.Trim()
+                    .Replace("\r", "")
+                    .Replace("\n", "")
+                    .Replace("\t", "");
             }
         }
     }
